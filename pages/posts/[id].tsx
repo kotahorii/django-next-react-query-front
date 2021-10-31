@@ -5,3 +5,7 @@ const Post = () => {
 }
 
 export default Post
+
+export const getStaticProps: GetStaticProps = () => {}
+
+export const getStaticPaths: GetStaticPaths = () => {}

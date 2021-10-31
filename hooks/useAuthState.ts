@@ -1,5 +1,5 @@
 import Cookie from 'universal-cookie'
-import { AuthUser, Token } from '../types/types'
+import { Token } from '../types/types'
 import axios from 'axios'
 import { useRouter } from 'next/dist/client/router'
 import { atom, useRecoilState } from 'recoil'

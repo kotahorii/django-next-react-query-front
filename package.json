@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
+    "@types/node-fetch": "^3.0.3",
     "@types/recoil": "^0.0.9",
     "add": "^2.0.6",
     "axios": "^0.24.0",
     "next": "12.0.1",
+    "node-fetch": "^3.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-query": "^3.29.1",
