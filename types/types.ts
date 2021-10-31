@@ -18,7 +18,7 @@ export type PostNews = {
   id: string
   content: string
 }
-export type Auth = {
+export type AuthUser = {
   username: string
   password: string
 }
