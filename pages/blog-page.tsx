@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { VFC } from 'react'
 import { dehydrate, QueryClient, useQueryClient } from 'react-query'
 import { Layout } from '../components/Layout'
 import { getNews } from '../lib/fetch'
@@ -6,8 +6,16 @@ import Link from 'next/link'
 import { ReadNews } from '../types/types'
 import { Post } from '../components/Post'
 import { GetStaticProps } from 'next'
+import axios from 'axios'
 
-const BlogPage = () => {
+export const getFrontNews = async () => {
+  const res = await axios.get<ReadNews[]>(
+    `${process.env.NEXT_PUBLIC_RESTAPI_URL}tasks/`
+  )
+  return res.data
+}
+
+const BlogPage: VFC<{ news: ReadNews[] }> = ({ news }) => {
   const queryClient = useQueryClient()
   const data = queryClient.getQueryData<ReadNews[]>('news')
   return (

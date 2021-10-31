@@ -1,16 +1,28 @@
 import { GetStaticProps } from 'next'
-import React from 'react'
-import { dehydrate, QueryClient, useQueryClient } from 'react-query'
+import React, { VFC } from 'react'
+import { useQuery } from 'react-query'
 import { Layout } from '../components/Layout'
 import { Task } from '../components/Task'
 import { useEditedTask } from '../hooks/useEditedTask'
 import { getTasks } from '../lib/fetch'
 import { ReadTask } from '../types/types'
 import Link from 'next/link'
+import axios from 'axios'
 
-const TaskPage = () => {
-  const queryClient = useQueryClient()
-  const data = queryClient.getQueryData<ReadTask[]>('tasks')
+export const getFrontTasks = async () => {
+  const res = await axios.get<ReadTask[]>(
+    `${process.env.NEXT_PUBLIC_RESTAPI_URL}tasks/`
+  )
+  return res.data
+}
+
+const TaskPage: VFC<{ tasks: ReadTask[] }> = ({ tasks }) => {
+  const { data } = useQuery<ReadTask[], Error>({
+    queryKey: 'tasks',
+    queryFn: getFrontTasks,
+    staleTime: Infinity,
+    initialData: tasks,
+  })
   const { editedTask, setEditedTask } = useEditedTask()
   return (
     <Layout title="Task Page">
@@ -45,11 +57,10 @@ const TaskPage = () => {
 export default TaskPage
 
 export const getStaticProps: GetStaticProps = async () => {
-  const queryClient = new QueryClient()
-  await queryClient.prefetchQuery('tasks', getTasks)
+  const tasks = await getTasks()
   return {
     props: {
-      dehydratedState: dehydrate(queryClient),
+      tasks,
     },
     revalidate: 3,
   }
