@@ -4,8 +4,13 @@ import { Layout } from '../../components/Layout'
 import { getAllPostIds, getPostData } from '../../lib/fetch'
 import { ReadNews } from '../../types/types'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-const Blogs: VFC<{ post: ReadNews }> = ({ post }) => {
+const Post: VFC<{ post: ReadNews }> = ({ post }) => {
+  const router = useRouter()
+  if (router.isFallback || !post) {
+    return <div>Loading...</div>
+  }
   return (
     <Layout title={post.id}>
       <p className="m-4">
@@ -38,11 +43,16 @@ const Blogs: VFC<{ post: ReadNews }> = ({ post }) => {
   )
 }
 
-export default Blogs
+export default Post
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = await getAllPostIds()
-
+  const res = await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}news/`)
+  const posts = (await res.json()) as ReadNews[]
+  const paths = await posts.map((post) => ({
+    params: {
+      id: post.id,
+    },
+  }))
   return {
     paths,
     fallback: true,
@@ -54,5 +64,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       post,
     },
+    revalidate: 3,
   }
 }

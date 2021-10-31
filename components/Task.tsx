@@ -10,6 +10,8 @@ type Props = {
 export const Task: VFC<Props> = ({ task }) => {
   const { setEditedTask } = useEditedTask()
   const { deleteTaskMutation } = useAppMutate()
+  if (deleteTaskMutation.isLoading)
+    return <div className="text-center">Loading...</div>
   return (
     <div>
       <span>{task.id}</span>
