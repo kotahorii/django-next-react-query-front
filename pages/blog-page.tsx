@@ -1,11 +1,18 @@
 import React from 'react'
+import { Layout } from '../components/Layout'
 
 const BlogPage = () => {
   return (
-    <div>
-      
-    </div>
+    <Layout title="Blog page">
+      <ul>
+
+      </ul>
+    </Layout>
   )
 }
 
 export default BlogPage
+
+export const getStaticProps = () => {
+  
+}
